@@ -22,6 +22,7 @@ from tools import (
     register_transition_tools
 )
 
+
 # Initialize the FastMCP server
 app = FastMCP(
     name="ppt-mcp-server"
@@ -402,6 +403,72 @@ def get_server_info() -> Dict:
         ]
     }
 
+@app.tool()
+def create_presentation2(filename: str = "new_presentation.pptx") -> Dict:
+    """
+    Create a new blank PowerPoint presentation and store it in memory.
+    Works fully standalone — schema is well-defined so n8n won't crash.
+    
+    Args:
+        filename (str): The filename to save the presentation as (default: new_presentation.pptx)
+
+    Returns:
+        Dict: Info about the created presentation
+    """
+    from pptx import Presentation
+    import os
+    
+    # Create a new blank presentation
+    prs = Presentation()
+    
+    # Create output directory if needed
+    output_dir = "./generated_presentations"
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Full path to save file
+    filepath = os.path.join(output_dir, filename)
+    
+    # Save the new presentation file
+    prs.save(filepath)
+    
+    # Store in memory (so other tools can use it)
+    presentation_id = filename
+    presentations[presentation_id] = prs
+    set_current_presentation_id(presentation_id)
+    
+    return {
+        "message": f"✅ Created new presentation: {filename}",
+        "presentation_id": presentation_id,
+        "path": os.path.abspath(filepath),
+        "slide_count": len(prs.slides)
+    }
+
+@app.tool()
+def hello_world_timestamp(message: str) -> Dict:
+    """
+    Returns current timestamp when message contains 'hello world'.
+    
+    Args:
+        message: The message to check
+        
+    Returns:
+        Dict with timestamp or error message
+    """
+    from datetime import datetime
+    
+    if "hello world" in message.lower():
+        return {
+            "message": "Hello World!",
+            "timestamp": datetime.now().isoformat(),
+            "formatted_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "unix_timestamp": int(datetime.now().timestamp())
+        }
+    else:
+        return {
+            "error": "Message must contain 'hello world'",
+            "received_message": message
+        }
+        
 # ---- Main Function ----
 def main(transport: str = "stdio", port: int = 8000):
     if transport == "http":
