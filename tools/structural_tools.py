@@ -10,6 +10,7 @@ import utils as ppt_utils
 def register_structural_tools(app: FastMCP, presentations: Dict, get_current_presentation_id, validate_parameters, is_positive, is_non_negative, is_in_range, is_valid_rgb, add_shape_direct):
     """Register structural element tools with the FastMCP app"""
     
+    
     @app.tool()
     def add_table(
         slide_index: int,
@@ -19,7 +20,7 @@ def register_structural_tools(app: FastMCP, presentations: Dict, get_current_pre
         top: float,
         width: float,
         height: float,
-        data: Optional[List[List[str]]] = None,
+        data: List[List[str]],
         header_row: bool = True,
         header_font_size: int = 12,
         body_font_size: int = 10,
@@ -65,7 +66,7 @@ def register_structural_tools(app: FastMCP, presentations: Dict, get_current_pre
         valid, error = validate_parameters(validations)
         if not valid:
             return {"error": error}
-        
+
         # Validate data if provided
         if data:
             if len(data) != rows:
