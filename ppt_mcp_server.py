@@ -475,6 +475,7 @@ def main(transport: str = "stdio", port: int = 8000):
         import asyncio
         # Set the port for HTTP transport
         app.settings.port = port
+        app.settings.host = "0.0.0.0"
         # Start the FastMCP server with HTTP transport
         try:
             app.run(transport='streamable-http')
