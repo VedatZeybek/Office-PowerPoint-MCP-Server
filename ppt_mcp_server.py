@@ -3,10 +3,13 @@
 MCP Server for PowerPoint manipulation using python-pptx.
 Consolidated version with 20 tools organized into multiple modules.
 """
+
+
 import os
 import argparse
 from typing import Dict, Any
 from mcp.server.fastmcp import FastMCP
+
 
 # import utils  # Currently unused
 from tools import (
@@ -22,11 +25,13 @@ from tools import (
     register_transition_tools
 )
 
-
-# Initialize the FastMCP server
 app = FastMCP(
-    name="ppt-mcp-server"
+    name="ppt-mcp-server",
+    host="0.0.0.0",
+    port=8000,
+    streamable_http_path="/mcp",
 )
+
 
 # Global state to store presentations in memory
 presentations = {}
@@ -468,14 +473,15 @@ def hello_world_timestamp(message: str) -> Dict:
             "error": "Message must contain 'hello world'",
             "received_message": message
         }
-        
+
+
 # ---- Main Function ----
 def main(transport: str = "stdio", port: int = 8000):
     if transport == "http":
-        import asyncio
-        # Set the port for HTTP transport
+
         app.settings.port = port
         app.settings.host = "0.0.0.0"
+        
         # Start the FastMCP server with HTTP transport
         try:
             app.run(transport='streamable-http')
@@ -487,6 +493,10 @@ def main(transport: str = "stdio", port: int = 8000):
             print(f"Error starting server: {e}")
             
     elif transport == "sse":
+        # Set the port for SSE transport
+        app.settings.port = port
+        app.settings.host = "0.0.0.0"
+        
         # Run the FastMCP server in SSE (Server Side Events) mode
         app.run(transport='sse')
         
