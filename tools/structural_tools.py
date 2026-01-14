@@ -20,7 +20,7 @@ def register_structural_tools(app: FastMCP, presentations: Dict, get_current_pre
         top: float,
         width: float,
         height: float,
-        data: List[List[str]],
+        data: List[List[Any]], #noted
         header_row: bool = True,
         header_font_size: int = 12,
         body_font_size: int = 10,

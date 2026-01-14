@@ -5,6 +5,10 @@ build/
 dist/
 wheels/
 *.egg-info
+generated_presentations/
+reports/
+*.pptx
+
 
 # Virtual environments
 .venv

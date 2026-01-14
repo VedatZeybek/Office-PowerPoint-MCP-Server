@@ -233,7 +233,7 @@ The server provides **34 specialized tools** organized into the following catego
 11. **extract_presentation_text** - ✨ **NEW** Extract text content from all slides in presentation
 12. **populate_placeholder** - Populate placeholders with text
 13. **add_bullet_points** - Add formatted bullet points
-14. **manage_text** - ✨ **Unified text tool** (add/format/validate/format_runs)
+14. **** - ✨ **Unified text tool** (add/format/validate/format_runs)
 15. **manage_image** - ✨ **Unified image tool** (add/enhance)
 
 ### **Template Operations (7 tools)**

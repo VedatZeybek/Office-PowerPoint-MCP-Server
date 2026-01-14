@@ -264,6 +264,32 @@ def register_content_tools(app: FastMCP, presentations: Dict, get_current_presen
                 "error": f"Failed to add bullet points: {str(e)}"
             }
 
+    def normalize_text(text: str) -> str:
+        if not text:
+            return text
+        try:
+            return bytes(text, "utf-8").decode("unicode_escape")
+        except Exception:
+            return text
+
+    # def adaptive_font_size(text: str, base_size=28):
+    #     if not text:
+    #         return base_size
+
+    #     length = len(text)
+
+    #     if length > 900:
+    #         return 16
+    #     elif length > 700:
+    #         return 18
+    #     elif length > 500:
+    #         return 20
+    #     elif length > 350:
+    #         return 22
+    #     elif length > 200:
+    #         return 24
+    #     return base_size
+
     @app.tool()
     def manage_text(
         slide_index: int,
@@ -323,7 +349,10 @@ def register_content_tools(app: FastMCP, presentations: Dict, get_current_presen
             if not valid:
                 return {"error": error}
         
+        # effective_font_size = font_size or adaptive_font_size(text)
+
         try:
+            text = normalize_text(text)
             if operation == "add":
                 # Add new textbox
                 shape = ppt_utils.add_textbox(
